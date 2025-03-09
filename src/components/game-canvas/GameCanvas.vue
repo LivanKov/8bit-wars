@@ -36,7 +36,13 @@ export default {
 
     mounted() {
         this.setupGame();
-        window.addEventListener('keydown', this.game.keydown);
+        window.addEventListener('keydown', (event) => {
+            // Prevent default behavior for game control keys
+            if ([32, 37, 39, 65, 68].includes(event.keyCode)) {
+                event.preventDefault();
+            }
+            this.game.keydown(event);
+        });
         this.game.init();
     },
 
@@ -90,15 +96,15 @@ export default {
         },
 
         handlePlayerMovement(event) {
-            if (event.keyCode === 37 || event.keyCode === 65) {
+            if (event.key === 'ArrowLeft' || event.key === 'a') {
                 this.player.update(-5, 0);
             }
 
-            if (event.keyCode === 39 || event.keyCode === 68) {
+            if (event.key === 'ArrowRight' || event.key === 'd') {
                 this.player.update(5, 0);
             }
 
-            if (event.keyCode === 32) {
+            if (event.key === ' ') { // Space character
                 this.player.shoot(-5);
             }
         },
